@@ -1,5 +1,7 @@
 # Feature Specification: [FEATURE NAME]
 
+> **Constitution Compliance**: This feature must align with the project's constitution (`.specify/memory/constitution.md`).
+
 **Feature Branch**: `[###-feature-name]`  
 **Created**: [DATE]  
 **Status**: Draft  
