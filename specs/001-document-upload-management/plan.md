@@ -27,12 +27,16 @@ Key outcomes:
 **Constraints**: Must run offline without external services; use local filesystem storage; follow training-first clarity and security principles.  
 **Scale/Scope**: Targeting a training/demo audience (tens to low hundreds of users), not production-scale.
 
-## Constitution Check
+## Optional Cloud Integration: Asynchronous Virus Scanning
 
-- [x] The feature aligns with the **Training-First Clarity** principle (easy to understand, documented, minimal cognitive load).
-- [x] The feature aligns with **Security & Privacy by Design** (authorization, input validation, data minimization).
-- [x] The feature is defined via **Spec-Driven Development**: spec.md includes user stories, acceptance criteria, and measurable success metrics.
-- [x] The feature supports **Offline-First with Cloud Migration** (uses abstractions for infrastructure, does not require external services for core flow).
+While the core feature is designed to run locally, we also plan for an optional cloud-based async virus scanning pipeline to support more realistic enterprise workflows.
+
+- **Workflow**: After a file is uploaded and stored locally, the app will enqueue a scan request message into **Azure Queue Storage**.
+- **Processing**: An **Azure Function** with a **Queue Storage trigger** will pick up scan messages and perform a virus scan (e.g., using an AV engine or third-party service).
+- **Result Handling**: The function will update scan status in the database (e.g., `Pending`, `Scanning`, `Clean`, `Infected`) and optionally notify users via SignalR/notifications.
+- **Failure Modes**: If scanning fails or detects malware, the system can quarantine the file, mark it as blocked, and prevent download until resolved.
+
+This model keeps the core app offline-capable while enabling a cloud-hosted background job for enhanced security in a hosted deployment.
 - [x] The feature follows **Simplicity & Incremental Delivery**: small scope, minimal dependencies, and clear rollback path.
 
 ## Project Structure
